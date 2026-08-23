@@ -1,0 +1,32 @@
+% Compile with XeLaTeX or LuaLaTeX
+\documentclass[11pt,oneside]{book}
+
+\input{preamble}
+\input{metadata}
+
+\begin{document}
+
+\frontmatter
+\maketitle
+\tableofcontents
+
+\chapter*{Napomena o ovoj verziji}
+\addcontentsline{toc}{chapter}{Napomena o ovoj verziji}
+Ovo je radni projekat za skraćenu i stilski preradjenu verziju ciklusa \textit{Hiperion}. Cilj nije doslovan prevod, već jasno i savremeno pripovedanje koje čuva glavnu radnju, likove, motive, odnose, emocije i ključna pravila sveta.
+
+\mainmatter
+\input{parts/part1-hyperion}
+\input{parts/part2-fall}
+\input{parts/part3-endymion}
+\input{parts/part4-rise}
+
+\backmatter
+\chapter*{Beleške o svetu}
+\addcontentsline{toc}{chapter}{Beleške o svetu}
+\input{notes/world}
+
+\chapter*{Likovi}
+\addcontentsline{toc}{chapter}{Likovi}
+\input{notes/characters}
+
+\end{document}

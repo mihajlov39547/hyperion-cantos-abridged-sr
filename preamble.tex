@@ -1,0 +1,29 @@
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage[script=latin]{serbian}
+\setotherlanguage{english}
+\setmainfont{Noto Serif}
+
+\usepackage[a4paper,margin=2.6cm]{geometry}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{parskip}
+\setlength{\parindent}{0pt}
+\setstretch{1.08}
+
+\usepackage{titlesec}
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries}
+  {\chaptername\ \thechapter}{12pt}{\Huge}
+
+\usepackage{hyperref}
+\hypersetup{
+  unicode=true,
+  pdftitle={Hiperion — skraćena verzija},
+  pdfauthor={Radna adaptacija},
+  colorlinks=false,
+  hidelinks
+}
+
+\newcommand{\scene}{\par\bigskip\centerline{* * *}\bigskip\par}
+\newcommand{\editorialnote}[1]{\par\smallskip\noindent\textit{[Urednička beleška: #1]}\par\smallskip}

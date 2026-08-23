@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Hyperion Cantos — Abridged Serbian Reader
 
 A Serbian-language abridged reader project based on **The Hyperion Cantos** by Dan Simmons.
@@ -181,3 +182,41 @@ This repository does not claim ownership of the underlying novels.
 The MIT License included in this repository applies only to original project tooling such as LaTeX templates, build scripts and configuration files. It does **not** grant rights to reproduce, distribute or commercially exploit material derived from the original novels.
 
 Original ebook, TXT, PDF or scanned copies of the novels should not be committed to this repository.
+=======
+# Hiperion — abridged LaTeX projekat
+
+Ovo je početni projekat za jednu povezanu, skraćenu verziju četiri romana ciklusa Hyperion Cantos.
+
+## Struktura
+- `main.tex` — glavni dokument
+- `preamble.tex` — LaTeX podešavanja
+- `metadata.tex` — naslov i metapodaci
+- `parts/` — četiri velika dela
+- `chapters/` — poglavlja koja obrađujemo jedno po jedno
+- `notes/characters.tex` — kontinuitet likova i njihovih motivacija
+- `notes/world.tex` — kontinuitet sveta i termina
+- `STYLE_GUIDE.md` — pravila prerade
+- `AGENT_PROMPT.md` — gotov prompt za agenta
+
+## Kompajliranje
+Preporučeno: XeLaTeX ili LuaLaTeX.
+
+Primer:
+
+```bash
+xelatex main.tex
+xelatex main.tex
+```
+
+Dva prolaza su korisna zbog sadržaja i referenci.
+
+## Predloženi način rada
+1. Uzeti samo jedno poglavlje.
+2. Napraviti kratak plan događaja i emocionalnih lukova.
+3. Napisati skraćenu verziju u odgovarajući `.tex` fajl.
+4. Proveriti kontinuitet termina i likova.
+5. Tek onda preći na sledeće poglavlje.
+
+## Napomena
+Ovaj projekat je zamišljen kao transformativna, skraćena prerada za ličnu upotrebu. Izvorni tekst ne treba kopirati u dužim blokovima; sadržaj treba prepričavati i redigovati sopstvenim rečima.
+>>>>>>> d6c56df (initial commit)
