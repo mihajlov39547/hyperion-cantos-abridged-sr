@@ -26,3 +26,6 @@ Hyperion*.txt
 
 # Optional generated PDF
 main.pdf
+
+# Folder for PowerShell scripts
+/.powershell/
