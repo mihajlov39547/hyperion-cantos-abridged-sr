@@ -24,6 +24,7 @@
 \usepackage{setspace}
 \usepackage{graphicx}
 \usepackage{xcolor}
+\usepackage{tikz}
 \usepackage{titlesec}
 \usepackage{tocloft}
 \usepackage{tcolorbox}
@@ -61,42 +62,90 @@
 \newcommand{\BookCreditName}{Radna adaptacija na savremeni srpski}
 \newcommand{\BookYear}{\the\year}
 \newcommand{\CoverImagePath}{images/cover.jpg}
+\newcommand{\BackImagePath}{images/back.jpg}
 \AtBeginDocument{%
   \hypersetup{%
     pdftitle={\BookTitle\space--\space\BookSubtitle},
     pdfauthor={\BookCreditName}%
   }%
 }
+\newcommand{\HyperionFullPageImage}[1]{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \clip (current page.south west) rectangle (current page.north east);
+    \node[inner sep=0pt,anchor=center] at (current page.center) {%
+      \includegraphics[width=\paperwidth]{#1}%
+    };
+  \end{tikzpicture}%
+}
 
-\newcommand{\makehyperiontitle}{%
+\newcommand{\makehyperioncover}{%
+  \hypersetup{pageanchor=false}%
+  \pagenumbering{Alph}%
   \begin{titlepage}
     \thispagestyle{empty}
-    \pagecolor{HyperionPale}
-    \centering
-    \vspace*{18mm}
-    {\Large\scshape \BookSubtitle\par}
-    \vspace{22mm}
-    {\fontsize{42}{46}\selectfont\scshape \BookTitle\par}
-    \vspace{6mm}
-    {\color{HyperionRule}\rule{0.44\textwidth}{0.4pt}\par}
-    \vspace{18mm}
     \IfFileExists{\CoverImagePath}{%
-      \includegraphics[width=0.44\textwidth,height=46mm,keepaspectratio]{\CoverImagePath}\par
-      \vspace{16mm}
+      \HyperionFullPageImage{\CoverImagePath}%
     }{%
-      {\fontsize{18}{22}\selectfont\color{HyperionMuted}\textasteriskcentered\quad
-      \textasteriskcentered\quad\textasteriskcentered\par}
-      \vspace{20mm}
-    }
-    \vfill
-    {\small\scshape \BookCreditLabel\par}
-    \vspace{2mm}
-    {\large \BookCreditName\par}
-    \vspace{14mm}
-    {\large \BookYear\par}
-    \vspace*{12mm}
+      \pagecolor{HyperionInk}%
+    }%
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[
+        anchor=north,
+        align=center,
+        text=white,
+        text width=0.82\paperwidth
+      ] at ([yshift=-31mm]current page.north) {%
+        {\fontsize{41}{45}\selectfont\scshape \BookTitle\par}
+        \vspace{4mm}
+        {\Large\scshape \BookSubtitle\par}
+      };
+      \node[
+        anchor=south,
+        align=center,
+        text=white,
+        text opacity=0.86,
+        text width=0.78\paperwidth
+      ] at ([yshift=18mm]current page.south) {%
+        {\small\scshape \BookCreditLabel\par}
+        \vspace{2mm}
+        {\large \BookCreditName\par}
+        \vspace{8mm}
+        {\large \BookYear\par}
+      };
+    \end{tikzpicture}%
+    \null
   \end{titlepage}
   \pagecolor{white}
+  \hypersetup{pageanchor=true}%
+}
+\let\makehyperiontitle\makehyperioncover
+
+\newcommand{\makehyperionback}{%
+  \clearpage
+  \hypersetup{pageanchor=false}%
+  \thispagestyle{empty}
+  \IfFileExists{\BackImagePath}{%
+    \HyperionFullPageImage{\BackImagePath}%
+  }{%
+    \pagecolor{HyperionInk}%
+  }%
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[
+      anchor=south,
+      align=center,
+      text=white,
+      text opacity=0.82,
+      text width=0.78\paperwidth
+    ] at ([yshift=17mm]current page.south) {%
+      {\Large\scshape \BookTitle\par}
+      \vspace{3mm}
+      {\large \BookYear\par}
+    };
+  \end{tikzpicture}%
+  \null
+  \clearpage
+  \pagecolor{white}
+  \hypersetup{pageanchor=true}%
 }
 
 % --- Running heads -------------------------------------------------------
