@@ -3,6 +3,11 @@ param(
     [switch]$Open
 )
 
+[Console]::InputEncoding  = [System.Text.UTF8Encoding]::new($false)
+[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)
+$OutputEncoding = [System.Text.UTF8Encoding]::new($false)
+chcp 65001 > $null
+
 $ErrorActionPreference = "Stop"
 
 $ProjectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -16,11 +21,46 @@ function Test-Command {
     return [bool](Get-Command $Name -ErrorAction SilentlyContinue)
 }
 
+function Invoke-NativeCommand {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Command,
+
+        [Parameter(Mandatory = $true)]
+        [string[]]$Arguments
+    )
+
+    $oldErrorActionPreference = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+
+    try {
+        # Important: use Write-Host so command output is displayed,
+        # but is NOT returned as part of the function result.
+        & $Command @Arguments 2>&1 | ForEach-Object {
+            if ($_ -is [System.Management.Automation.ErrorRecord]) {
+                Write-Host $_.Exception.Message
+            }
+            else {
+                Write-Host $_
+            }
+        }
+
+        [int]$exitCode = $LASTEXITCODE
+    }
+    finally {
+        $ErrorActionPreference = $oldErrorActionPreference
+    }
+
+    # The function returns only the numeric process exit code.
+    return $exitCode
+}
+
 function Remove-BuildFiles {
     $extensions = @(
         "*.aux", "*.bbl", "*.bcf", "*.blg", "*.fdb_latexmk",
         "*.fls", "*.lof", "*.log", "*.lot", "*.nav", "*.out",
-        "*.run.xml", "*.snm", "*.synctex.gz", "*.toc", "*.vrb"
+        "*.run.xml", "*.snm", "*.synctex.gz", "*.toc", "*.vrb",
+        "*.xdv"
     )
 
     foreach ($pattern in $extensions) {
@@ -51,15 +91,18 @@ Write-Host ""
 if (Test-Command "latexmk") {
     Write-Host "Koristim latexmk + XeLaTeX..." -ForegroundColor Yellow
 
-    & latexmk `
-        -xelatex `
-        -interaction=nonstopmode `
-        -halt-on-error `
-        -file-line-error `
-        $MainFile
+    [int]$exitCode = Invoke-NativeCommand `
+        -Command "latexmk" `
+        -Arguments @(
+            "-xelatex",
+            "-interaction=nonstopmode",
+            "-halt-on-error",
+            "-file-line-error",
+            $MainFile
+        )
 
-    if ($LASTEXITCODE -ne 0) {
-        throw "LaTeX build nije uspeo."
+    if ($exitCode -ne 0) {
+        throw "LaTeX build nije uspeo. Exit code: $exitCode"
     }
 }
 elseif (Test-Command "xelatex") {
@@ -68,14 +111,17 @@ elseif (Test-Command "xelatex") {
     for ($i = 1; $i -le 3; $i++) {
         Write-Host "XeLaTeX prolaz $i/3..." -ForegroundColor DarkGray
 
-        & xelatex `
-            -interaction=nonstopmode `
-            -halt-on-error `
-            -file-line-error `
-            $MainFile
+        [int]$exitCode = Invoke-NativeCommand `
+            -Command "xelatex" `
+            -Arguments @(
+                "-interaction=nonstopmode",
+                "-halt-on-error",
+                "-file-line-error",
+                $MainFile
+            )
 
-        if ($LASTEXITCODE -ne 0) {
-            throw "XeLaTeX build nije uspeo u prolazu $i."
+        if ($exitCode -ne 0) {
+            throw "XeLaTeX build nije uspeo u prolazu $i. Exit code: $exitCode"
         }
     }
 }
