@@ -1,0 +1,223 @@
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage[script=latin]{serbian}
+\setotherlanguage{english}
+
+\IfFontExistsTF{EB Garamond}
+  {\setmainfont{EB Garamond}}
+  {\IfFontExistsTF{Libertinus Serif}
+    {\setmainfont{Libertinus Serif}}
+    {\setmainfont{Noto Serif}}}
+
+\usepackage[
+  paperwidth=148mm,
+  paperheight=210mm,
+  inner=18mm,
+  outer=15mm,
+  top=18mm,
+  bottom=22mm,
+  headheight=22pt,
+  headsep=7mm,
+  footskip=10mm
+]{geometry}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{tocloft}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{fancyhdr}
+\usepackage{emptypage}
+\usepackage{needspace}
+\usepackage{enumitem}
+\usepackage{bookmark}
+\usepackage{hyperref}
+
+\definecolor{HyperionInk}{HTML}{1F2328}
+\definecolor{HyperionMuted}{HTML}{666A70}
+\definecolor{HyperionRule}{HTML}{8A8F98}
+\definecolor{HyperionPale}{HTML}{F3F1EC}
+\definecolor{HyperionBox}{HTML}{F7F6F2}
+
+\setlength{\parindent}{1.15em}
+\setlength{\parskip}{0pt}
+\setstretch{1.08}
+\frenchspacing
+\raggedbottom
+\emergencystretch=1.5em
+
+\hypersetup{
+  unicode=true,
+  colorlinks=false,
+  hidelinks
+}
+
+% --- Title page metadata -------------------------------------------------
+\newcommand{\BookTitle}{Hiperion}
+\newcommand{\BookSubtitle}{Skraćena savremena adaptacija}
+\newcommand{\BookCreditLabel}{priredio}
+\newcommand{\BookCreditName}{Radna adaptacija na savremeni srpski}
+\newcommand{\BookYear}{\the\year}
+\newcommand{\CoverImagePath}{images/cover.jpg}
+\AtBeginDocument{%
+  \hypersetup{%
+    pdftitle={\BookTitle\space--\space\BookSubtitle},
+    pdfauthor={\BookCreditName}%
+  }%
+}
+
+\newcommand{\makehyperiontitle}{%
+  \begin{titlepage}
+    \thispagestyle{empty}
+    \pagecolor{HyperionPale}
+    \centering
+    \vspace*{18mm}
+    {\Large\scshape \BookSubtitle\par}
+    \vspace{22mm}
+    {\fontsize{42}{46}\selectfont\scshape \BookTitle\par}
+    \vspace{6mm}
+    {\color{HyperionRule}\rule{0.44\textwidth}{0.4pt}\par}
+    \vspace{18mm}
+    \IfFileExists{\CoverImagePath}{%
+      \includegraphics[width=0.44\textwidth,height=46mm,keepaspectratio]{\CoverImagePath}\par
+      \vspace{16mm}
+    }{%
+      {\fontsize{18}{22}\selectfont\color{HyperionMuted}\textasteriskcentered\quad
+      \textasteriskcentered\quad\textasteriskcentered\par}
+      \vspace{20mm}
+    }
+    \vfill
+    {\small\scshape \BookCreditLabel\par}
+    \vspace{2mm}
+    {\large \BookCreditName\par}
+    \vspace{14mm}
+    {\large \BookYear\par}
+    \vspace*{12mm}
+  \end{titlepage}
+  \pagecolor{white}
+}
+
+% --- Running heads -------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\partmark}[1]{\markboth{#1}{}}
+\fancyhead[LE]{\small\scshape \BookTitle}
+\fancyhead[RO]{\small\scshape\nouppercase{\leftmark}}
+\fancyfoot[LE,RO]{\small\thepage}
+\renewcommand{\headrulewidth}{0.35pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{HyperionRule}\leaders\hrule height \headrulewidth\hfill}}
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyfoot[C]{\small\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+% --- Chapter images ------------------------------------------------------
+\makeatletter
+\let\hc@chapterimage\@empty
+\newcommand{\chapterimage}[1]{\gdef\hc@chapterimage{#1}}
+\newcommand{\hc@printchapterimage}{%
+  \ifx\hc@chapterimage\@empty
+  \else
+    \IfFileExists{\hc@chapterimage}{%
+      \par\vspace{10mm}
+      \noindent\makebox[\textwidth][c]{%
+        \includegraphics[width=\textwidth,height=0.31\textheight,keepaspectratio]{\hc@chapterimage}%
+      }%
+      \par\vspace{7mm}
+    }{}%
+    \global\let\hc@chapterimage\@empty
+  \fi
+}
+\newcommand{\printchapterimage}{\hc@printchapterimage}
+\makeatother
+
+% --- Chapter and part design --------------------------------------------
+\titleformat{\chapter}[display]
+  {\normalfont\color{HyperionInk}}
+  {\scshape\large Glava \thechapter}
+  {8pt}
+  {\Needspace{9\baselineskip}\fontsize{28}{32}\selectfont}
+  [\vspace{3mm}{\color{HyperionRule}\titlerule[0.4pt]}\printchapterimage]
+\titlespacing*{\chapter}{0pt}{18mm}{11mm}
+
+\titleformat{name=\chapter,numberless}[display]
+  {\normalfont\color{HyperionInk}}
+  {}
+  {0pt}
+  {\Needspace{7\baselineskip}\fontsize{25}{30}\selectfont}
+  [\vspace{3mm}{\color{HyperionRule}\titlerule[0.4pt]}]
+\titlespacing*{name=\chapter,numberless}{0pt}{12mm}{10mm}
+
+\titleformat{\part}[display]
+  {\thispagestyle{empty}\normalfont\centering\color{HyperionInk}}
+  {\vspace*{26mm}\Large\scshape Deo \thepart}
+  {16pt}
+  {\fontsize{34}{38}\selectfont\scshape}
+  [\vspace{9mm}{\color{HyperionRule}\rule{0.34\textwidth}{0.45pt}}\vfill]
+\titlespacing*{\part}{0pt}{0pt}{0pt}
+
+\titleformat{\section}
+  {\normalfont\Large\scshape\color{HyperionInk}}
+  {\thesection}
+  {0.7em}
+  {}
+  [{\color{HyperionRule}\titlerule[0.35pt]}]
+\titlespacing*{\section}{0pt}{2.4ex plus .6ex}{1.3ex plus .2ex}
+
+% --- Table of contents ---------------------------------------------------
+\renewcommand{\contentsname}{Sadržaj}
+\setlength{\cftbeforetoctitleskip}{0pt}
+\setlength{\cftaftertoctitleskip}{12mm}
+\renewcommand{\cfttoctitlefont}{\normalfont\fontsize{28}{32}\selectfont\scshape}
+\renewcommand{\cftpartfont}{\normalfont\large\scshape\color{HyperionInk}}
+\renewcommand{\cftpartpagefont}{\normalfont\large\color{HyperionInk}}
+\renewcommand{\cftchapfont}{\normalfont}
+\renewcommand{\cftchappagefont}{\normalfont}
+\renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}}
+\setlength{\cftbeforepartskip}{10pt}
+\setlength{\cftbeforechapskip}{4pt}
+\setlength{\cftchapnumwidth}{2.4em}
+
+% --- Editorial notes and prose helpers ----------------------------------
+\newtcolorbox{HyperionEditorialBox}{
+  enhanced,
+  breakable,
+  colback=HyperionBox,
+  colframe=HyperionRule!55,
+  colbacktitle=HyperionRule!22,
+  boxrule=0.35pt,
+  arc=1.5pt,
+  left=8pt,
+  right=8pt,
+  top=7pt,
+  bottom=7pt,
+  before skip=8pt,
+  after skip=12pt,
+  fonttitle=\small\scshape,
+  coltitle=HyperionInk,
+  title={Urednička beleška}
+}
+\newcommand{\editorialnote}[1]{%
+  \begin{HyperionEditorialBox}
+    \itshape #1
+  \end{HyperionEditorialBox}
+}
+\newcommand{\scene}{%
+  \par\vspace{1.4\baselineskip}
+  \begin{center}
+    {\color{HyperionRule}\rule{18mm}{0.35pt}\hspace{3mm}\textasteriskcentered\hspace{3mm}\rule{18mm}{0.35pt}}
+  \end{center}
+  \vspace{0.8\baselineskip}\par
+}
+
+\setlist[description]{
+  style=nextline,
+  leftmargin=1.2em,
+  labelindent=0pt,
+  itemsep=0.8\baselineskip,
+  font=\normalfont\scshape
+}
