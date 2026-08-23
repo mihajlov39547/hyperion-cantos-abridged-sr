@@ -1,0 +1,28 @@
+# Original source books — never commit
+*.epub
+*.mobi
+*.azw
+*.azw3
+source/
+sources/
+originals/
+
+# Specific local source files
+Hiperion*.txt
+Hyperion*.txt
+
+# LaTeX auxiliary files
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+
+# Optional generated PDF
+main.pdf
