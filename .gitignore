@@ -30,3 +30,13 @@ main.pdf
 # Folder for PowerShell scripts
 /.powershell/
 out.txt
+
+# LaTeX build artifacts
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.toc
+*.xdv
+*.out
+*.synctex.gz
