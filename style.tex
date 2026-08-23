@@ -167,18 +167,41 @@
 % --- Chapter images ------------------------------------------------------
 \makeatletter
 \let\hc@chapterimage\@empty
-\newcommand{\chapterimage}[1]{\gdef\hc@chapterimage{#1}}
+\let\hc@chapterimageinclude\@empty
+\newcommand{\chapterimage}[1]{%
+  \gdef\hc@chapterimage{#1}%
+  \gdef\hc@chapterimageinclude{%
+    \includegraphics[
+      width=0.86\textwidth,
+      height=0.25\textheight,
+      keepaspectratio
+    ]{#1}%
+  }%
+}
+\newcommand{\chapterimagetrim}[2]{%
+  \gdef\hc@chapterimage{#1}%
+  \gdef\hc@chapterimageinclude{%
+    \includegraphics[
+      width=0.86\textwidth,
+      height=0.25\textheight,
+      keepaspectratio,
+      trim=#2,
+      clip
+    ]{#1}%
+  }%
+}
 \newcommand{\hc@printchapterimage}{%
   \ifx\hc@chapterimage\@empty
   \else
     \IfFileExists{\hc@chapterimage}{%
-      \par\vspace{10mm}
+      \par\vspace{8mm}
       \noindent\makebox[\textwidth][c]{%
-        \includegraphics[width=\textwidth,height=0.31\textheight,keepaspectratio]{\hc@chapterimage}%
+        \hc@chapterimageinclude
       }%
-      \par\vspace{7mm}
+      \par\vspace{9mm}
     }{}%
     \global\let\hc@chapterimage\@empty
+    \global\let\hc@chapterimageinclude\@empty
   \fi
 }
 \newcommand{\printchapterimage}{\hc@printchapterimage}
@@ -232,6 +255,10 @@
 \setlength{\cftchapnumwidth}{2.4em}
 
 % --- Editorial notes and prose helpers ----------------------------------
+\newif\ifshoweditorialnotes
+% Switch to \showeditorialnotestrue for an editorial/work build.
+\showeditorialnotesfalse
+
 \newtcolorbox{HyperionEditorialBox}{
   enhanced,
   breakable,
@@ -251,9 +278,11 @@
   title={Urednička beleška}
 }
 \newcommand{\editorialnote}[1]{%
-  \begin{HyperionEditorialBox}
-    \itshape #1
-  \end{HyperionEditorialBox}
+  \ifshoweditorialnotes
+    \begin{HyperionEditorialBox}
+      \itshape #1
+    \end{HyperionEditorialBox}
+  \fi
 }
 \newcommand{\scene}{%
   \par\vspace{1.4\baselineskip}
